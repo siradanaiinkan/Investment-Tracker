@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investment Tracker - ติดตามการลงทุน</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="ติดตามและจัดการการลงทุนของคุณ">
+  <meta name="theme-color" content="#667eea">
+  
+  <!-- iOS Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Investment Tracker">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      padding: 1rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .header p {
+      margin: 0.5rem 0 0 0;
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .toggle-btn {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 2px solid #e2e8f0;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .summary-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .summary-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: #64748b;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .summary-card .value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #1e293b;
+    }
+
+    .total-investment {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .total-investment h3 {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-container {
+      background: #f8fafc;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-title {
+      margin: 0 0 1.5rem 0;
+      color: #1e293b;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    @media (max-width: 968px) {
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group label {
+      margin-bottom: 0.5rem;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    input {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Grouped View Styles */
+    .grouped-container {
+      display: none;
+    }
+
+    .grouped-container.active {
+      display: block;
+    }
+
+    .investment-groups {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .investment-group {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .investment-group:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .group-header {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .group-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .group-stats {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .group-stat {
+      text-align: center;
+    }
+
+    .group-stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .group-stat-label {
+      opacity: 0.8;
+      font-size: 0.8rem;
+    }
+
+    .expand-icon {
+      transition: transform 0.3s ease;
+      font-size: 1.2rem;
+    }
+
+    .investment-group.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .group-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .investment-group.expanded .group-details {
+      max-height: 1000px;
+    }
+
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .transactions-table th,
+    .transactions-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .transactions-table th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .transactions-table tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .transaction-amount {
+      font-weight: 600;
+      color: #059669;
+    }
+
+    .cumulative-amount {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 1.1rem;
+    }
+
+    .transaction-date {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Traditional View Styles */
+    .traditional-container {
+      display: block;
+    }
+
+    .traditional-container.active {
+      display: block;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-header {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .sort-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .sort-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .sort-btn:hover, .sort-btn.active {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .investment-name {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .investment-amount {
+      font-weight: 700;
+      color: #059669;
+      font-size: 1.1rem;
+    }
+
+    .investment-date {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .progress-bar {
+      background: #e5e7eb;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #10b981, #059669);
+      height: 100%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+    }
+
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .group-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: right;
+      }
+      
+      .transactions-table {
+        font-size: 0.9rem;
+      }
+      
+      .transactions-table th,
+      .transactions-table td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💰 Investment Tracker</h1>
+      <p>ติดตามและจัดการการลงทุนของคุณ</p>
+    </div>
+
+    <div class="content">
+      <div class="summary-grid">
+        <div class="summary-card total-investment">
+          <h3>ยอดรวมลงทุน</h3>
+          <div class="value" id="total-investment">฿0</div>
+        </div>
+        <div class="summary-card">
+          <h3>จำนวนประเภท</h3>
+          <div class="value" id="unique-investments">0</div>
+        </div>
+        <div class="summary-card">
+          <h3>จำนวนรายการ</h3>
+          <div class="value" id="total-items">0</div>
+        </div>
+        <div class="summary-card">
+          <h3>ค่าเฉลี่ย</h3>
+          <div class="value" id="average-investment">฿0</div>
+        </div>
+      </div>
+
+      <div class="view-toggle">
+        <button class="toggle-btn active" onclick="switchView('grouped')">📊 มุมมองแยกตามประเภท</button>
+        <button class="toggle-btn" onclick="switchView('traditional')">📋 มุมมองรายการทั้งหมด</button>
+      </div>
+
+      <div class="form-container">
+        <h2 class="form-title">เพิ่มการลงทุนใหม่</h2>
+        <form id="investment-form">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="name">ชื่อการลงทุน</label>
+              <input type="text" id="name" placeholder="เช่น SET50, LTF, RMF" required />
+            </div>
+            <div class="input-group">
+              <label for="amount">จำนวนเงิน (บาท)</label>
+              <input type="number" id="amount" placeholder="0" min="0" step="0.01" required />
+            </div>
+            <div class="input-group">
+              <label for="investment-date">วันที่ลงทุน</label>
+              <input type="date" id="investment-date" required />
+            </div>
+            <button type="submit" class="btn-primary">เพิ่มข้อมูล</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Grouped View -->
+      <div id="grouped-view" class="grouped-container active">
+        <div id="investment-groups" class="investment-groups"></div>
+        <div id="grouped-empty-state" class="empty-state" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <h3>ยังไม่มีการลงทุน</h3>
+          <p>เริ่มต้นโดยการเพิ่มการลงทุนแรกของคุณ</p>
+        </div>
+      </div>
+
+      <!-- Traditional View -->
+      <div id="traditional-view" class="traditional-container">
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">รายการการลงทุน</h3>
+            <div class="sort-controls">
+              <button class="sort-btn active" onclick="sortTable('date')">วันที่</button>
+              <button class="sort-btn" onclick="sortTable('amount')">จำนวน</button>
+              <button class="sort-btn" onclick="sortTable('name')">ชื่อ</button>
+            </div>
+          </div>
+
+          <table id="investment-table">
+            <thead>
+              <tr>
+                <th>ชื่อการลงทุน</th>
+                <th>จำนวนเงิน</th>
+                <th>สัดส่วน</th>
+                <th>วันที่เพิ่ม</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div id="traditional-empty-state" class="empty-state" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <h3>ยังไม่มีการลงทุน</h3>
+            <p>เริ่มต้นโดยการเพิ่มการลงทุนแรกของคุณ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("investment-form");
+    const tableBody = document.querySelector("#investment-table tbody");
+    const table = document.getElementById("investment-table");
+    const traditionalEmptyState = document.getElementById("traditional-empty-state");
+    const groupedEmptyState = document.getElementById("grouped-empty-state");
+    const investmentGroups = document.getElementById("investment-groups");
+    
+    // Summary elements
+    const totalInvestmentEl = document.getElementById("total-investment");
+    const uniqueInvestmentsEl = document.getElementById("unique-investments");
+    const totalItemsEl = document.getElementById("total-items");
+    const averageInvestmentEl = document.getElementById("average-investment");
+
+    let investments = [];
+    let currentView = 'grouped';
+    let currentSort = 'date';
+    let sortOrder = 'desc';
+
+    // Check if localStorage is available and load data
+    function initializeData() {
+      try {
+        const saved = localStorage.getItem('investments');
+        if (saved) {
+          investments = JSON.parse(saved);
+          console.log('✅ Data loaded from localStorage');
+        } else {
+          investments = [];
+          console.log('📝 Starting with empty data');
+        }
+      } catch (e) {
+        investments = [];
+        console.warn('⚠️ localStorage not available, using memory storage');
+      }
+    }
+
+    function saveToLocal() {
+      try {
+        localStorage.setItem('investments', JSON.stringify(investments));
+        console.log('💾 Data saved to localStorage');
+      } catch (e) {
+        console.warn('⚠️ Cannot save to localStorage');
+      }
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('th-TH', {
+        style: 'currency',
+        currency: 'THB',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }).format(amount);
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'short', 
+        day: 'numeric'
+      });
+    }
+
+    function calculateStats() {
+      if (investments.length === 0) return { total: 0, average: 0, uniqueCount: 0 };
+      
+      const total = investments.reduce((sum, inv) => sum + parseFloat(inv.amount), 0);
+      const average = total / investments.length;
+      const uniqueCount = new Set(investments.map(inv => inv.name)).size;
+      
+      return { total, average, uniqueCount };
+    }
+
+    function updateSummary() {
+      const stats = calculateStats();
+      
+      totalInvestmentEl.textContent = formatCurrency(stats.total);
+      uniqueInvestmentsEl.textContent = stats.uniqueCount.toLocaleString();
+      totalItemsEl.textContent = investments.length.toLocaleString();
+      averageInvestmentEl.textContent = formatCurrency(stats.average);
+    }
+
+    function groupInvestmentsByName() {
+      const groups = {};
+      
+      investments.forEach(inv => {
+        if (!groups[inv.name]) {
+          groups[inv.name] = [];
+        }
+        groups[inv.name].push(inv);
+      });
+      
+      // Sort each group by date and calculate cumulative amounts
+      Object.keys(groups).forEach(name => {
+        groups[name].sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        let cumulative = 0;
+        groups[name] = groups[name].map(inv => {
+          cumulative += parseFloat(inv.amount);
+          return { ...inv, cumulative };
+        });
+      });
+      
+      return groups;
+    }
+
+    function renderGroupedView() {
+      const groups = groupInvestmentsByName();
+      const groupNames = Object.keys(groups);
+      
+      if (groupNames.length === 0) {
+        investmentGroups.style.display = 'none';
+        groupedEmptyState.style.display = 'block';
+        return;
+      }
+      
+      investmentGroups.style.display = 'grid';
+      groupedEmptyState.style.display = 'none';
+      investmentGroups.innerHTML = '';
+      
+      groupNames.forEach(name => {
+        const groupData = groups[name];
+        const totalAmount = groupData[groupData.length - 1].cumulative;
+        const transactionCount = groupData.length;
+        const avgAmount = totalAmount / transactionCount;
+        
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'investment-group';
+        groupDiv.innerHTML = `
+          <div class="group-header" onclick="toggleGroup(this)">
+            <h3 class="group-title">📈 ${name}</h3>
+            <div class="group-stats">
+              <div class="group-stat">
+                <span class="group-stat-value">${formatCurrency(totalAmount)}</span>
+                <span class="group-stat-label">ยอดสะสม</span>
+              </div>
+              <div class="group-stat">
+                <span class="group-stat-value">${transactionCount}</span>
+                <span class="group-stat-label">ครั้ง</span>
+              </div>
+              <div class="group-stat">
+                <span class="group-stat-value">${formatCurrency(avgAmount)}</span>
+                <span class="group-stat-label">ค่าเฉลี่ย</span>
+              </div>
+            </div>
+            <span class="expand-icon">▼</span>
+          </div>
+          <div class="group-details">
+            <table class="transactions-table">
+              <thead>
+                <tr>
+                  <th>วันที่</th>
+                  <th>จำนวนเงิน</th>
+                  <th>ยอดสะสม</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${groupData.map((inv, index) => `
+                  <tr>
+                    <td>
+                      <div class="transaction-date">${formatDate(inv.date)}</div>
+                    </td>
+                    <td>
+                      <div class="transaction-amount">${formatCurrency(parseFloat(inv.amount))}</div>
+                    </td>
+                    <td>
+                      <div class="cumulative-amount">${formatCurrency(inv.cumulative)}</div>
+                    </td>
+                    <td>
+                      <button class="btn-delete" onclick="deleteInvestmentByData('${inv.name}', '${inv.date}', ${inv.amount})">
+                        ลบ
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        
+        investmentGroups.appendChild(groupDiv);
+      });
+    }
+
+    function renderTraditionalView() {
+      if (investments.length === 0) {
+        table.style.display = 'none';
+        traditionalEmptyState.style.display = 'block';
+        return;
+      }
+
+      table.style.display = 'table';
+      traditionalEmptyState.style.display = 'none';
+      
+      tableBody.innerHTML = "";
+      const stats = calculateStats();
+      
+      investments.forEach((inv, index) => {
+        const row = document.createElement("tr");
+        const percentage = ((parseFloat(inv.amount) / stats.total) * 100).toFixed(1);
+
+        row.innerHTML = `
+          <td>
+            <div class="investment-name">${inv.name}</div>
+          </td>
+          <td>
+            <div class="investment-amount">${formatCurrency(parseFloat(inv.amount))}</div>
+          </td>
+          <td>
+            <div>${percentage}%</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${percentage}%"></div>
+            </div>
+          </td>
+          <td>
+            <div class="investment-date">${formatDate(inv.date)}</div>
+          </td>
+          <td>
+            <button class="btn-delete" onclick="deleteInvestment(${index})">
+              ลบ
+            </button>
+          </td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    function render() {
+      updateSummary();
+      
+      if (currentView === 'grouped') {
+        renderGroupedView();
+      } else {
+        renderTraditionalView();
+      }
+    }
+
+    function toggleGroup(header) {
+      const group = header.parentElement;
+      group.classList.toggle('expanded');
+    }
+
+    function switchView(viewType) {
+      currentView = viewType;
+      
+      // Update toggle buttons
+      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Show/hide views
+      document.getElementById('grouped-view').classList.toggle('active', viewType === 'grouped');
+      document.getElementById('traditional-view').classList.toggle('active', viewType === 'traditional');
+      
+      render();
+    }
+
+    function sortTable(sortBy) {
+      if (currentView !== 'traditional') return;
+      
+      // Update active button
+      document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if (currentSort === sortBy) {
+        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSort = sortBy;
+        sortOrder = 'desc';
+      }
+
+      investments.sort((a, b) => {
+        let valueA, valueB;
+        
+        switch (sortBy) {
+          case 'amount':
+            valueA = parseFloat(a.amount);
+            valueB = parseFloat(b.amount);
+            break;
+          case 'name':
+            valueA = a.name.toLowerCase();
+            valueB = b.name.toLowerCase();
+            break;
+          case 'date':
+          default:
+            valueA = new Date(a.date);
+            valueB = new Date(b.date);
+            break;
+        }
+
+        if (sortOrder === 'asc') {
+          return valueA > valueB ? 1 : -1;
+        } else {
+          return valueA < valueB ? 1 : -1;
+        }
+      });
+
+      render();
+    }
+
+    function deleteInvestment(index) {
+      if (confirm('คุณต้องการลบรายการนี้หรือไม่?')) {
+        investments.splice(index, 1);
+        saveToLocal(); // Save to localStorage
+        render();
+      }
+    }
+
+    function deleteInvestmentByData(name, date, amount) {
+      if (confirm(`คุณต้องการลบรายการ ${name} จำนวน ${formatCurrency(amount)} หรือไม่?`)) {
+        const index = investments.findIndex(inv => 
+          inv.name === name && 
+          inv.date === date && 
+          parseFloat(inv.amount) === amount
+        );
+        
+        if (index !== -1) {
+          investments.splice(index, 1);
+          saveToLocal(); // Save to localStorage
+          render();
+        }
+      }
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const amount = document.getElementById("amount").value.trim();
+      const investmentDate = document.getElementById("investment-date").value;
+
+      if (name && amount && investmentDate && parseFloat(amount) > 0) {
+        const newInvestment = {
+          name,
+          amount: parseFloat(amount),
+          date: investmentDate
+        };
+        
+        investments.push(newInvestment);
+        saveToLocal(); // Save to localStorage
+        render();
+        form.reset();
+        
+        // Set default date to today for next entry
+        document.getElementById("investment-date").value = new Date().toISOString().split('T')[0];
+        
+        // Show success feedback
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'เพิ่มสำเร็จ!';
+        submitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        
+        setTimeout(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.style.background = '';
+        }, 1500);
+      }
+    });
+
+    // Initialize and render
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeData(); // Load data from localStorage or start empty
+      document.getElementById("investment-date").value = new Date().toISOString().split('T')[0];
+      render();
+    });
+  </script>
+</body>
+</html>
