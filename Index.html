@@ -8,7 +8,6 @@
   <!-- PWA Meta Tags -->
   <meta name="description" content="ติดตามและจัดการการลงทุนของคุณ">
   <meta name="theme-color" content="#667eea">
-  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkludmVzdG1lbnQgVHJhY2tlciIsCiAgInNob3J0X25hbWUiOiAi4LiV4Li04LiU4LiV4Liy4Lih4LiB4Liy4Lij4Lil4LiH4LiX4Li44LiZIiwKICAiZGVzY3JpcHRpb24iOiAi4LiV4Li04LiU4LiV4Liy4Lih4LmB4Lil4Liw4LiI4Lix4LiU4LiB4Liy4Lij4LiB4Liy4Lij4Lil4LiH4LiX4Li44LiZ4LiC4Lit4LiH4LiE4Li44LiT4LmAIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmM2Y0ZjYiLAogICJ0aGVtZV9jb2xvciI6ICIjNjY3ZWVhIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRJd0lpQm9aV2xuYUhROU9qRXlNQ0JtYVd4c1BTSWpOalkzWldWaElpQjJhV1YzUW05NFBTSXdJREFnTVRJd0lERXlNQ0krUEhCaGRHZ2daRDBpYlRndU1UY2dORE11T0RFZ05TNDFPQzAxTGpVNExUVXVOVGd0TlM0MU9DMDNMams0TFRVdU5UZ3ROeTQ1T0MwMUxqVTRMUzQ1TVMwMExqVTVMUzR1T1RFdE5DNDNOUzQxT0MwMExqVTVMak15TFRJdU5UQXVOVGt1TURNZ01TNDBNQzB5TGpjNUxqSTJMUzR6TlMweExqTTJMakUxTFM0ek5TMHhMak0yTFM0ek5TMHhMak0yTFM0ek5TMHhMak0yTGpFMUxqTTFMak0xSURFdU16WXVNelV0TWpnZ01ERTNNRE0wTVRGaGVDQmhJRDBpTlM0d056a2dOUzR3TnprZ01pNHhNek1nTXk0eE5Ea3VOalEzTGpFME1pQXVOalEzTGpFME1pMHVOelEzTGpFME1pQXVOelEzTGpFME1pQXVOVGc0TGpVNE9DMDBMakU1TXk0MU9EZ3ROREU1TXpJdE1pNHdNakZhZFdndElrZDJiVzUzV1dScldrSXZjR2cyUjI5MlMyOTJkV2xoZFd4dGRVdGtVbXN3VWs5T1UzZFJkblVpTDIrOGNHRjBhRDBpYlRFeExqZzBJRGszTGpJNUlEVXVOVGd0TlM0MU9DMDFMalU4SUhRaUlpQXJWbXBoU2xCaGJpQjRlZzM5IiwKICAgICAgInNpemVzIjogIjE5Mng3OTJXZ2giLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
   
   <!-- iOS Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,7 +27,7 @@
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
@@ -58,6 +57,31 @@
 
     .content {
       padding: 2rem;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .toggle-btn {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 2px solid #e2e8f0;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
     }
 
     .summary-grid {
@@ -181,6 +205,155 @@
       box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
     }
 
+    /* Grouped View Styles */
+    .grouped-container {
+      display: none;
+    }
+
+    .grouped-container.active {
+      display: block;
+    }
+
+    .investment-groups {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .investment-group {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .investment-group:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .group-header {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .group-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .group-stats {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .group-stat {
+      text-align: center;
+    }
+
+    .group-stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .group-stat-label {
+      opacity: 0.8;
+      font-size: 0.8rem;
+    }
+
+    .expand-icon {
+      transition: transform 0.3s ease;
+      font-size: 1.2rem;
+    }
+
+    .investment-group.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .group-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .investment-group.expanded .group-details {
+      max-height: 1000px;
+    }
+
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .transactions-table th,
+    .transactions-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .transactions-table th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .transactions-table tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .transaction-amount {
+      font-weight: 600;
+      color: #059669;
+    }
+
+    .cumulative-amount {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 1.1rem;
+    }
+
+    .transaction-date {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Traditional View Styles */
+    .traditional-container {
+      display: block;
+    }
+
+    .traditional-container.active {
+      display: block;
+    }
+
     .table-container {
       background: white;
       border-radius: 15px;
@@ -267,36 +440,6 @@
       font-size: 0.9rem;
     }
 
-    .btn-delete {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
-    }
-
-    .btn-delete:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 3rem;
-      color: #64748b;
-    }
-
-    .empty-state svg {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 1rem;
-      opacity: 0.5;
-    }
-
     .progress-bar {
       background: #e5e7eb;
       height: 8px;
@@ -312,153 +455,34 @@
       border-radius: 4px;
     }
 
-    .percentage-text {
-      font-size: 0.8rem;
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
       color: #64748b;
-      margin-top: 0.25rem;
     }
 
-    .backup-section {
-      background: #f1f5f9;
-      padding: 2rem;
-      border-radius: 15px;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+      opacity: 0.5;
     }
 
-    .backup-title {
-      margin: 0 0 1.5rem 0;
-      color: #1e293b;
-      font-size: 1.3rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .backup-controls {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-
-    .backup-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .backup-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    .backup-card h4 {
-      margin: 0 0 0.5rem 0;
-      color: #374151;
-      font-size: 1.1rem;
-    }
-
-    .backup-card p {
-      margin: 0 0 1rem 0;
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-
-    .btn-export {
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
-      width: 100%;
-    }
-
-    .btn-export:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
-    }
-
-    .file-input-wrapper {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .file-input {
-      position: absolute;
-      left: -9999px;
-      opacity: 0;
-    }
-
-    .btn-import {
-      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-      width: 100%;
-      display: block;
-    }
-
-    .btn-import:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-    }
-
-    .import-status {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      text-align: center;
-      display: none;
-    }
-
-    .import-status.success {
-      background: #d1fae5;
-      color: #065f46;
-      border: 1px solid #a7f3d0;
-    }
-
-    .import-status.error {
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-
-    .backup-info {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-
-    .backup-info h5 {
-      margin: 0 0 0.5rem 0;
-      color: #1e40af;
-      font-size: 0.9rem;
-    }
-
-    .backup-info ul {
-      margin: 0;
-      padding-left: 1.2rem;
-      color: #1e40af;
-      font-size: 0.8rem;
+    @media (max-width: 768px) {
+      .group-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: right;
+      }
+      
+      .transactions-table {
+        font-size: 0.9rem;
+      }
+      
+      .transactions-table th,
+      .transactions-table td {
+        padding: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -476,6 +500,10 @@
           <div class="value" id="total-investment">฿0</div>
         </div>
         <div class="summary-card">
+          <h3>จำนวนประเภท</h3>
+          <div class="value" id="unique-investments">0</div>
+        </div>
+        <div class="summary-card">
           <h3>จำนวนรายการ</h3>
           <div class="value" id="total-items">0</div>
         </div>
@@ -483,43 +511,11 @@
           <h3>ค่าเฉลี่ย</h3>
           <div class="value" id="average-investment">฿0</div>
         </div>
-        <div class="summary-card">
-          <h3>รายการใหญ่สุด</h3>
-          <div class="value" id="max-investment">฿0</div>
-        </div>
       </div>
 
-      <div class="backup-section">
-        <h2 class="backup-title">
-          📊 สำรองข้อมูลการลงทุน
-        </h2>
-        <div class="backup-controls">
-          <div class="backup-card">
-            <h4>📤 Export Excel</h4>
-            <p>ส่งออกข้อมูลการลงทุนเป็นไฟล์ Excel</p>
-            <button class="btn-export" onclick="exportToExcel()">
-              ดาวน์โหลด Excel
-            </button>
-          </div>
-          <div class="backup-card">
-            <h4>📥 Import Excel</h4>
-            <p>นำเข้าข้อมูลจากไฟล์ Excel</p>
-            <div class="file-input-wrapper">
-              <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="importFromExcel(event)">
-              <label for="excel-file" class="btn-import">เลือกไฟล์ Excel</label>
-            </div>
-            <div id="import-status" class="import-status"></div>
-          </div>
-        </div>
-        <div class="backup-info">
-          <h5>📋 หมายเหตุ:</h5>
-          <ul>
-            <li>ไฟล์ Excel ที่ส่งออกจะมีข้อมูล: ชื่อการลงทุน, จำนวนเงิน, วันที่ลงทุน</li>
-            <li>สำหรับการ Import กรุณาใช้ไฟล์ที่ส่งออกจากระบบนี้</li>
-            <li>ข้อมูลจะถูก Merge กับข้อมูลเดิม ไม่ใช่การแทนที่</li>
-            <li><strong>สำคัญ:</strong> ใช้ Live Server เพื่อให้ข้อมูลถูกบันทึกถาวร</li>
-          </ul>
-        </div>
+      <div class="view-toggle">
+        <button class="toggle-btn active" onclick="switchView('grouped')">📊 มุมมองแยกตามประเภท</button>
+        <button class="toggle-btn" onclick="switchView('traditional')">📋 มุมมองรายการทั้งหมด</button>
       </div>
 
       <div class="form-container">
@@ -528,7 +524,7 @@
           <div class="form-grid">
             <div class="input-group">
               <label for="name">ชื่อการลงทุน</label>
-              <input type="text" id="name" placeholder="เช่น หุ้น SET, กองทุน, ทอง" required />
+              <input type="text" id="name" placeholder="เช่น SET50, LTF, RMF" required />
             </div>
             <div class="input-group">
               <label for="amount">จำนวนเงิน (บาท)</label>
@@ -543,30 +539,10 @@
         </form>
       </div>
 
-      <div class="table-container">
-        <div class="table-header">
-          <h3 class="table-title">รายการการลงทุน</h3>
-          <div class="sort-controls">
-            <button class="sort-btn active" onclick="sortTable('date')">วันที่</button>
-            <button class="sort-btn" onclick="sortTable('amount')">จำนวน</button>
-            <button class="sort-btn" onclick="sortTable('name')">ชื่อ</button>
-          </div>
-        </div>
-
-        <table id="investment-table">
-          <thead>
-            <tr>
-              <th>ชื่อการลงทุน</th>
-              <th>จำนวนเงิน</th>
-              <th>สัดส่วน</th>
-              <th>วันที่เพิ่ม</th>
-              <th>จัดการ</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-
-        <div id="empty-state" class="empty-state" style="display: none;">
+      <!-- Grouped View -->
+      <div id="grouped-view" class="grouped-container active">
+        <div id="investment-groups" class="investment-groups"></div>
+        <div id="grouped-empty-state" class="empty-state" style="display: none;">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
           </svg>
@@ -574,84 +550,86 @@
           <p>เริ่มต้นโดยการเพิ่มการลงทุนแรกของคุณ</p>
         </div>
       </div>
+
+      <!-- Traditional View -->
+      <div id="traditional-view" class="traditional-container">
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">รายการการลงทุน</h3>
+            <div class="sort-controls">
+              <button class="sort-btn active" onclick="sortTable('date')">วันที่</button>
+              <button class="sort-btn" onclick="sortTable('amount')">จำนวน</button>
+              <button class="sort-btn" onclick="sortTable('name')">ชื่อ</button>
+            </div>
+          </div>
+
+          <table id="investment-table">
+            <thead>
+              <tr>
+                <th>ชื่อการลงทุน</th>
+                <th>จำนวนเงิน</th>
+                <th>สัดส่วน</th>
+                <th>วันที่เพิ่ม</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div id="traditional-empty-state" class="empty-state" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <h3>ยังไม่มีการลงทุน</h3>
+            <p>เริ่มต้นโดยการเพิ่มการลงทุนแรกของคุณ</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
     const form = document.getElementById("investment-form");
     const tableBody = document.querySelector("#investment-table tbody");
     const table = document.getElementById("investment-table");
-    const emptyState = document.getElementById("empty-state");
+    const traditionalEmptyState = document.getElementById("traditional-empty-state");
+    const groupedEmptyState = document.getElementById("grouped-empty-state");
+    const investmentGroups = document.getElementById("investment-groups");
     
     // Summary elements
     const totalInvestmentEl = document.getElementById("total-investment");
+    const uniqueInvestmentsEl = document.getElementById("unique-investments");
     const totalItemsEl = document.getElementById("total-items");
     const averageInvestmentEl = document.getElementById("average-investment");
-    const maxInvestmentEl = document.getElementById("max-investment");
 
     let investments = [];
-    let isLocalStorageAvailable = false;
+    let currentView = 'grouped';
+    let currentSort = 'date';
+    let sortOrder = 'desc';
 
-    // Check if localStorage is available
-    function checkLocalStorage() {
+    // Check if localStorage is available and load data
+    function initializeData() {
       try {
-        const test = 'test';
-        localStorage.setItem(test, test);
-        localStorage.removeItem(test);
-        isLocalStorageAvailable = true;
-        investments = JSON.parse(localStorage.getItem("investments")) || [];
-        console.log('✅ localStorage is available');
+        const saved = localStorage.getItem('investments');
+        if (saved) {
+          investments = JSON.parse(saved);
+          console.log('✅ Data loaded from localStorage');
+        } else {
+          investments = [];
+          console.log('📝 Starting with empty data');
+        }
       } catch (e) {
-        isLocalStorageAvailable = false;
         investments = [];
-        console.warn('⚠️ localStorage is not available. Data will not persist.');
-        showStorageWarning();
+        console.warn('⚠️ localStorage not available, using memory storage');
       }
     }
 
-    function showStorageWarning() {
-      const warningDiv = document.createElement('div');
-      warningDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #fee2e2;
-        color: #991b1b;
-        padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid #fecaca;
-        max-width: 300px;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      `;
-      warningDiv.innerHTML = `
-        <strong>⚠️ คำเตือน:</strong><br>
-        ข้อมูลจะไม่ถูกบันทึก เนื่องจาก localStorage ไม่พร้อมใช้งาน<br>
-        <small>กรุณาใช้ Server (Live Server) เพื่อเก็บข้อมูล</small>
-        <button onclick="this.parentElement.remove()" style="float: right; margin-top: 5px; background: #dc2626; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer;">ปิด</button>
-      `;
-      document.body.appendChild(warningDiv);
-      
-      // Auto remove after 10 seconds
-      setTimeout(() => {
-        if (warningDiv.parentElement) {
-          warningDiv.remove();
-        }
-      }, 10000);
-    }
-
     function saveToLocal() {
-      if (isLocalStorageAvailable) {
-        try {
-          localStorage.setItem("investments", JSON.stringify(investments));
-          console.log('💾 Data saved to localStorage');
-        } catch (e) {
-          console.error('❌ Failed to save to localStorage:', e);
-          showImportStatus('ไม่สามารถบันทึกข้อมูลได้', 'error');
-        }
-      } else {
-        console.warn('⚠️ Cannot save: localStorage not available');
+      try {
+        localStorage.setItem('investments', JSON.stringify(investments));
+        console.log('💾 Data saved to localStorage');
+      } catch (e) {
+        console.warn('⚠️ Cannot save to localStorage');
       }
     }
 
@@ -673,171 +651,204 @@
       });
     }
 
-    function formatDateForExcel(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('th-TH', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    }
-
-    // Export to Excel function
-    function exportToExcel() {
-      if (investments.length === 0) {
-        alert('ไม่มีข้อมูลการลงทุนให้ส่งออก');
-        return;
-      }
-
-      // Prepare data for Excel
-      const exportData = investments.map((inv, index) => ({
-        'ลำดับ': index + 1,
-        'ชื่อการลงทุน': inv.name,
-        'จำนวนเงิน (บาท)': parseFloat(inv.amount),
-        'วันที่เพิ่ม': formatDateForExcel(inv.date),
-        'วันที่เพิ่ม (ISO)': inv.date // Keep original format for import
-      }));
-
-      // Add summary row
-      const stats = calculateStats();
-      exportData.push({
-        'ลำดับ': '',
-        'ชื่อการลงทุน': 'สรุปยอดรวม',
-        'จำนวนเงิน (บาท)': stats.total,
-        'วันที่เพิ่ม': '',
-        'วันที่เพิ่ม (ISO)': ''
-      });
-
-      // Create workbook
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.json_to_sheet(exportData);
-
-      // Set column widths
-      ws['!cols'] = [
-        { width: 8 },   // ลำดับ
-        { width: 25 },  // ชื่อการลงทุน
-        { width: 18 },  // จำนวนเงิน
-        { width: 15 },  // วันที่เพิ่ม
-        { width: 20 }   // วันที่เพิ่ม (ISO)
-      ];
-
-      // Add worksheet to workbook
-      XLSX.utils.book_append_sheet(wb, ws, 'การลงทุน');
-
-      // Generate filename with current date
-      const now = new Date();
-      const filename = `Investment_Backup_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
-
-      // Save file
-      XLSX.writeFile(wb, filename);
-
-      // Show success message
-      showImportStatus('ส่งออกข้อมูลเรียบร้อยแล้ว! 📊', 'success');
-    }
-
-    // Import from Excel function
-    function importFromExcel(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          
-          // Get first worksheet
-          const worksheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[worksheetName];
-          
-          // Convert to JSON
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-          
-          if (jsonData.length === 0) {
-            showImportStatus('ไฟล์ Excel ไม่มีข้อมูล', 'error');
-            return;
-          }
-
-          let importedCount = 0;
-          let skippedCount = 0;
-
-          jsonData.forEach(row => {
-            // Skip summary rows or empty rows
-            if (!row['ชื่อการลงทุน'] || 
-                row['ชื่อการลงทุน'] === 'สรุปยอดรวม' || 
-                !row['จำนวนเงิน (บาท)']) {
-              skippedCount++;
-              return;
-            }
-
-            const newInvestment = {
-              name: String(row['ชื่อการลงทุน']).trim(),
-              amount: parseFloat(row['จำนวนเงิน (บาท)']),
-              date: row['วันที่เพิ่ม (ISO)'] || new Date().toISOString()
-            };
-
-            // Validate data
-            if (newInvestment.name && 
-                !isNaN(newInvestment.amount) && 
-                newInvestment.amount > 0) {
-              investments.push(newInvestment);
-              importedCount++;
-            } else {
-              skippedCount++;
-            }
-          });
-
-          if (importedCount > 0) {
-            saveToLocal();
-            render();
-            showImportStatus(`นำเข้าข้อมูลสำเร็จ! เพิ่ม ${importedCount} รายการ${skippedCount > 0 ? ` (ข้าม ${skippedCount} รายการ)` : ''} ✅`, 'success');
-          } else {
-            showImportStatus('ไม่สามารถนำเข้าข้อมูลได้ กรุณาตรวจสอบรูปแบบไฟล์', 'error');
-          }
-
-        } catch (error) {
-          console.error('Import error:', error);
-          showImportStatus('เกิดข้อผิดพลาดในการอ่านไฟล์ Excel', 'error');
-        }
-      };
-      
-      reader.readAsArrayBuffer(file);
-      
-      // Reset file input
-      event.target.value = '';
-    }
-
-    function showImportStatus(message, type) {
-      const statusEl = document.getElementById('import-status');
-      statusEl.textContent = message;
-      statusEl.className = `import-status ${type}`;
-      statusEl.style.display = 'block';
-      
-      setTimeout(() => {
-        statusEl.style.display = 'none';
-      }, 5000);
-    }
-
     function calculateStats() {
-      if (investments.length === 0) return { total: 0, average: 0, max: 0 };
+      if (investments.length === 0) return { total: 0, average: 0, uniqueCount: 0 };
       
       const total = investments.reduce((sum, inv) => sum + parseFloat(inv.amount), 0);
       const average = total / investments.length;
-      const max = Math.max(...investments.map(inv => parseFloat(inv.amount)));
+      const uniqueCount = new Set(investments.map(inv => inv.name)).size;
       
-      return { total, average, max };
+      return { total, average, uniqueCount };
     }
 
     function updateSummary() {
       const stats = calculateStats();
       
       totalInvestmentEl.textContent = formatCurrency(stats.total);
+      uniqueInvestmentsEl.textContent = stats.uniqueCount.toLocaleString();
       totalItemsEl.textContent = investments.length.toLocaleString();
       averageInvestmentEl.textContent = formatCurrency(stats.average);
-      maxInvestmentEl.textContent = formatCurrency(stats.max);
+    }
+
+    function groupInvestmentsByName() {
+      const groups = {};
+      
+      investments.forEach(inv => {
+        if (!groups[inv.name]) {
+          groups[inv.name] = [];
+        }
+        groups[inv.name].push(inv);
+      });
+      
+      // Sort each group by date and calculate cumulative amounts
+      Object.keys(groups).forEach(name => {
+        groups[name].sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        let cumulative = 0;
+        groups[name] = groups[name].map(inv => {
+          cumulative += parseFloat(inv.amount);
+          return { ...inv, cumulative };
+        });
+      });
+      
+      return groups;
+    }
+
+    function renderGroupedView() {
+      const groups = groupInvestmentsByName();
+      const groupNames = Object.keys(groups);
+      
+      if (groupNames.length === 0) {
+        investmentGroups.style.display = 'none';
+        groupedEmptyState.style.display = 'block';
+        return;
+      }
+      
+      investmentGroups.style.display = 'grid';
+      groupedEmptyState.style.display = 'none';
+      investmentGroups.innerHTML = '';
+      
+      groupNames.forEach(name => {
+        const groupData = groups[name];
+        const totalAmount = groupData[groupData.length - 1].cumulative;
+        const transactionCount = groupData.length;
+        const avgAmount = totalAmount / transactionCount;
+        
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'investment-group';
+        groupDiv.innerHTML = `
+          <div class="group-header" onclick="toggleGroup(this)">
+            <h3 class="group-title">📈 ${name}</h3>
+            <div class="group-stats">
+              <div class="group-stat">
+                <span class="group-stat-value">${formatCurrency(totalAmount)}</span>
+                <span class="group-stat-label">ยอดสะสม</span>
+              </div>
+              <div class="group-stat">
+                <span class="group-stat-value">${transactionCount}</span>
+                <span class="group-stat-label">ครั้ง</span>
+              </div>
+              <div class="group-stat">
+                <span class="group-stat-value">${formatCurrency(avgAmount)}</span>
+                <span class="group-stat-label">ค่าเฉลี่ย</span>
+              </div>
+            </div>
+            <span class="expand-icon">▼</span>
+          </div>
+          <div class="group-details">
+            <table class="transactions-table">
+              <thead>
+                <tr>
+                  <th>วันที่</th>
+                  <th>จำนวนเงิน</th>
+                  <th>ยอดสะสม</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${groupData.map((inv, index) => `
+                  <tr>
+                    <td>
+                      <div class="transaction-date">${formatDate(inv.date)}</div>
+                    </td>
+                    <td>
+                      <div class="transaction-amount">${formatCurrency(parseFloat(inv.amount))}</div>
+                    </td>
+                    <td>
+                      <div class="cumulative-amount">${formatCurrency(inv.cumulative)}</div>
+                    </td>
+                    <td>
+                      <button class="btn-delete" onclick="deleteInvestmentByData('${inv.name}', '${inv.date}', ${inv.amount})">
+                        ลบ
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        
+        investmentGroups.appendChild(groupDiv);
+      });
+    }
+
+    function renderTraditionalView() {
+      if (investments.length === 0) {
+        table.style.display = 'none';
+        traditionalEmptyState.style.display = 'block';
+        return;
+      }
+
+      table.style.display = 'table';
+      traditionalEmptyState.style.display = 'none';
+      
+      tableBody.innerHTML = "";
+      const stats = calculateStats();
+      
+      investments.forEach((inv, index) => {
+        const row = document.createElement("tr");
+        const percentage = ((parseFloat(inv.amount) / stats.total) * 100).toFixed(1);
+
+        row.innerHTML = `
+          <td>
+            <div class="investment-name">${inv.name}</div>
+          </td>
+          <td>
+            <div class="investment-amount">${formatCurrency(parseFloat(inv.amount))}</div>
+          </td>
+          <td>
+            <div>${percentage}%</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${percentage}%"></div>
+            </div>
+          </td>
+          <td>
+            <div class="investment-date">${formatDate(inv.date)}</div>
+          </td>
+          <td>
+            <button class="btn-delete" onclick="deleteInvestment(${index})">
+              ลบ
+            </button>
+          </td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+    }
+
+    function render() {
+      updateSummary();
+      
+      if (currentView === 'grouped') {
+        renderGroupedView();
+      } else {
+        renderTraditionalView();
+      }
+    }
+
+    function toggleGroup(header) {
+      const group = header.parentElement;
+      group.classList.toggle('expanded');
+    }
+
+    function switchView(viewType) {
+      currentView = viewType;
+      
+      // Update toggle buttons
+      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Show/hide views
+      document.getElementById('grouped-view').classList.toggle('active', viewType === 'grouped');
+      document.getElementById('traditional-view').classList.toggle('active', viewType === 'traditional');
+      
+      render();
     }
 
     function sortTable(sortBy) {
+      if (currentView !== 'traditional') return;
+      
       // Update active button
       document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
@@ -878,58 +889,27 @@
       render();
     }
 
-    function render() {
-      if (investments.length === 0) {
-        table.style.display = 'none';
-        emptyState.style.display = 'block';
-        updateSummary();
-        return;
-      }
-
-      table.style.display = 'table';
-      emptyState.style.display = 'none';
-      
-      tableBody.innerHTML = "";
-      const stats = calculateStats();
-      
-      investments.forEach((inv, index) => {
-        const row = document.createElement("tr");
-        const percentage = ((parseFloat(inv.amount) / stats.total) * 100).toFixed(1);
-
-        row.innerHTML = `
-          <td>
-            <div class="investment-name">${inv.name}</div>
-          </td>
-          <td>
-            <div class="investment-amount">${formatCurrency(parseFloat(inv.amount))}</div>
-          </td>
-          <td>
-            <div>${percentage}%</div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: ${percentage}%"></div>
-            </div>
-          </td>
-          <td>
-            <div class="investment-date">${formatDate(inv.date)}</div>
-          </td>
-          <td>
-            <button class="btn-delete" onclick="deleteInvestment(${index})">
-              ลบ
-            </button>
-          </td>
-        `;
-
-        tableBody.appendChild(row);
-      });
-
-      updateSummary();
-    }
-
     function deleteInvestment(index) {
       if (confirm('คุณต้องการลบรายการนี้หรือไม่?')) {
         investments.splice(index, 1);
-        saveToLocal();
+        saveToLocal(); // Save to localStorage
         render();
+      }
+    }
+
+    function deleteInvestmentByData(name, date, amount) {
+      if (confirm(`คุณต้องการลบรายการ ${name} จำนวน ${formatCurrency(amount)} หรือไม่?`)) {
+        const index = investments.findIndex(inv => 
+          inv.name === name && 
+          inv.date === date && 
+          parseFloat(inv.amount) === amount
+        );
+        
+        if (index !== -1) {
+          investments.splice(index, 1);
+          saveToLocal(); // Save to localStorage
+          render();
+        }
       }
     }
 
@@ -940,17 +920,14 @@
       const investmentDate = document.getElementById("investment-date").value;
 
       if (name && amount && investmentDate && parseFloat(amount) > 0) {
-        // Convert selected date to ISO string at start of day
-        const selectedDate = new Date(investmentDate + 'T00:00:00.000Z');
-        
         const newInvestment = {
           name,
           amount: parseFloat(amount),
-          date: selectedDate.toISOString()
+          date: investmentDate
         };
         
         investments.push(newInvestment);
-        saveToLocal();
+        saveToLocal(); // Save to localStorage
         render();
         form.reset();
         
@@ -970,25 +947,12 @@
       }
     });
 
-    // Initialize with today's date and check localStorage
+    // Initialize and render
     document.addEventListener('DOMContentLoaded', function() {
-      checkLocalStorage();
+      initializeData(); // Load data from localStorage or start empty
       document.getElementById("investment-date").value = new Date().toISOString().split('T')[0];
+      render();
     });
-
-    // Set default date when page loads
-    window.addEventListener('load', function() {
-      if (!document.getElementById("investment-date").value) {
-        document.getElementById("investment-date").value = new Date().toISOString().split('T')[0];
-      }
-    });
-
-    let currentSort = 'date';
-    let sortOrder = 'desc';
-
-    // Initialize
-    checkLocalStorage();
-    render();
   </script>
 </body>
 </html>
