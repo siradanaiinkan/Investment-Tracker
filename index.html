@@ -59,6 +59,149 @@
       padding: 2rem;
     }
 
+    .backup-section {
+      background: #f1f5f9;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .backup-title {
+      margin: 0 0 1.5rem 0;
+      color: #1e293b;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .backup-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .backup-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .backup-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .backup-card h4 {
+      margin: 0 0 0.5rem 0;
+      color: #374151;
+      font-size: 1.1rem;
+    }
+
+    .backup-card p {
+      margin: 0 0 1rem 0;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .btn-export {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+      width: 100%;
+    }
+
+    .btn-export:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+    }
+
+    .btn-import {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+      width: 100%;
+      display: block;
+    }
+
+    .btn-import:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+    }
+
+    .import-status {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      display: none;
+    }
+
+    .import-status.success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .import-status.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .backup-info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .backup-info h5 {
+      margin: 0 0 0.5rem 0;
+      color: #1e40af;
+      font-size: 0.9rem;
+    }
+
+    .backup-info ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: #1e40af;
+      font-size: 0.8rem;
+    }
+
     .view-toggle {
       display: flex;
       gap: 1rem;
@@ -513,7 +656,38 @@
         </div>
       </div>
 
-      <div class="view-toggle">
+      <div class="backup-section">
+        <h2 class="backup-title">
+          📊 สำรองข้อมูลการลงทุน
+        </h2>
+        <div class="backup-controls">
+          <div class="backup-card">
+            <h4>📤 Export Excel</h4>
+            <p>ส่งออกข้อมูลการลงทุนเป็นไฟล์ Excel</p>
+            <button class="btn-export" onclick="exportToExcel()">
+              ดาวน์โหลด Excel
+            </button>
+          </div>
+          <div class="backup-card">
+            <h4>📥 Import Excel</h4>
+            <p>นำเข้าข้อมูลจากไฟล์ Excel</p>
+            <div class="file-input-wrapper">
+              <input type="file" id="excel-file" class="file-input" accept=".xlsx,.xls" onchange="importFromExcel(event)">
+              <label for="excel-file" class="btn-import">เลือกไฟล์ Excel</label>
+            </div>
+            <div id="import-status" class="import-status"></div>
+          </div>
+        </div>
+        <div class="backup-info">
+          <h5>📋 หมายเหตุ:</h5>
+          <ul>
+            <li>ไฟล์ Excel ที่ส่งออกจะมีข้อมูล: ชื่อการลงทุน, จำนวนเงิน, วันที่ลงทุน</li>
+            <li>สำหรับการ Import กรุณาใช้ไฟล์ที่ส่งออกจากระบบนี้</li>
+            <li>ข้อมูลจะถูก Merge กับข้อมูลเดิม ไม่ใช่การแทนที่</li>
+            <li><strong>สำคัญ:</strong> ข้อมูลจะถูกบันทึกใน localStorage</li>
+          </ul>
+        </div>
+      </div>
         <button class="toggle-btn active" onclick="switchView('grouped')">📊 มุมมองแยกตามประเภท</button>
         <button class="toggle-btn" onclick="switchView('traditional')">📋 มุมมองรายการทั้งหมด</button>
       </div>
